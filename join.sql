@@ -41,3 +41,11 @@
 -- FROM departments d
 -- RIGHT JOIN dept_manager m ON d.dept_no = m.dept_no
 -- WHERE d.dept_no IS NULL;
+
+-- SELECT * FROM employees WHERE emp_no = 10001 OR emp_no = 10005
+-- UNION ALL 
+-- SELECT * FROM employees WHERE emp_no = 10005;
+
+-- SELECT * FROM employees WHERE emp_no = 10001 OR emp_no = 10005
+-- UNION
+-- SELECT * FROM employees WHERE emp_no = 10005;
