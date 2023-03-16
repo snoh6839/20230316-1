@@ -154,6 +154,8 @@ ORDER BY avg_salary DESC;
 -- 그리고 GROUP BY 구문을 이용하여 직책 별로 평균 연봉을 계산합니다.
 -- HAVING 구문을 이용하여 평균 연봉이 60,000 이상인 직책들만을 대상으로 하고,
 -- ORDER BY 구문을 이용하여 평균 연봉이 높은 직책부터 내림차순으로 정렬합니다.
+-- CAST(AVG(s.salary) AS INT) AS avg_salary = FLOOR(AVG(s.salary)) AS avg_salary
+-- = CAST(AVG(s.salary) AS unsigned) AS avg_salary = truncate(AVG(s.salary), 0) AS avg_salary 
 
 -- 10. gender가 f 인 employoee의 (from employees) title (from titles)별 employoee 수를
 -- title과 함께 출력해 주세요 
@@ -251,4 +253,4 @@ GROUP BY e.gender;
 -- 	) t
 -- 		ON e.emp_no = t.emp_no
 -- WHERE e.gender = 'm';
--- 
+
