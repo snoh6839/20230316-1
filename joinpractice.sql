@@ -82,7 +82,11 @@ FROM employees e
 	INNER JOIN departments d
 		ON dm.dept_no = d.dept_no;
 
---
+-- emp_no, dept_no 등으로 조인을 수행하여
+-- Full_name, hire_date, dept_name, from_date의 정보를 가져옵니다.
+-- 이때 dept_manager 테이블에서 to_date가 '9999-01-01'인 데이터만 가져오므로,
+-- 현재 매니저로서 근무 중인 정보만을 가져옵니다.
+-- SELECT 문의 CONCAT 함수는 e.last_name과 e.first_name을 합쳐 Full_name이라는 별칭을 가지는 새로운 컬럼을 생성합니다.
 
 
 -- 7. 현재 title이 staff인 employee의 (from titles) 현재 평균 salary (from salaries)을 emp_no와 함께 출력해 주세요
@@ -93,6 +97,10 @@ FROM salaries s
 WHERE t.title = 'Staff'
 GROUP BY s.emp_no;
 
+-- salaries 테이블과 titles 테이블을 emp_no 컬럼을 기준으로 조인해서
+-- 이때 Staff 직책을 가진 직원들만 가져오도록 WHERE 절을 이용했습니다.
+-- 그리고 GROUP BY 구문을 이용해 각 직원의 emp_no 별로 평균 연봉을 구하고, AVG 함수를 이용해 평균값을 계산합니다.
+
 -- 현재 staff인 직원의  전체 평균
 SELECT t.title, AVG(s.salary) AS avg_salary
 FROM salaries s
@@ -102,36 +110,65 @@ WHERE t.title = 'Staff'
 	AND s.to_date = '9999-01-01'
 GROUP BY t.title;
 
+-- salaries 테이블과 titles 테이블을 emp_no 컬럼을 기준으로 INNER JOIN하여
+-- 직원들의 연봉 정보와 직책 정보를 가져옵니다.
+-- 그리고 WHERE 절에서는 Staff 직책에 속하는 직원들만을 가져오고,
+-- 현재 근무 중인 직원들만을 대상으로 하기 위해 to_date가 '9999-01-01'인 데이터만 가져옵니다.
+-- GROUP BY 구문을 이용해 직책 별로 평균 연봉을 계산합니다.
+
 -- 8. dept_manager의 모든 emp_no와 employees 테이블의 emp_no가 일치하는 모든 employee의  emp_no, last_name, first_name, hire_date, dept_no를 출력해주세요 dept_no는 dept_manager테이블에 있습니다.
 SELECT e.emp_no, concat(e.last_name, ' ' ,e.first_name) AS Full_name, e.hire_date, dm.dept_no
 FROM employees e
 	INNER JOIN dept_manager dm
 		ON e.emp_no = dm.emp_no;
+		
+-- employees와 dept_manager 테이블을 emp_no 컬럼을 기준으로 INNER JOIN 하여
+-- 각 직원의 사번(emp_no), 성(last_name), 이름(first_name), 입사일(hire_date),
+-- 그리고 해당 직원이 맡고 있는 부서의 번호(dept_no)를 가져옵니다.
 
 -- 9. 현재 각 title (from titles)별 AVG(salary) from salaries 가 60,000이상인 title의  title과 AVG(salary) 를 정수로 내림차순 출력해주세요.
 SELECT t.title, FLOOR(AVG(s.salary)) AS avg_salary
 FROM titles t
 	INNER JOIN salaries s
 		ON t.emp_no = s.emp_no
+WHERE s.to_date = '9999-01-01'
+	 AND t.to_date = '9999-01-01'
 GROUP BY t.title
 HAVING avg_salary >= 60000
 ORDER BY avg_salary DESC;
 
--- 현재salary 평균값으로 다시 구하기
-SELECT t.title, FLOOR(AVG(s.salary)) AS avg_salary
-FROM titles t
-	INNER JOIN salaries s
-		ON t.emp_no = s.emp_no
-WHERE s.to_date = '9999-01-01'
-GROUP BY t.title
-HAVING avg_salary >= 60000
-ORDER BY avg_salary DESC;
+-- titles 테이블과 salaries 테이블을 emp_no 컬럼을 기준으로 INNER JOIN하여
+-- 각 직원의 직책 정보와 연봉 정보를 가져옵니다.
+-- WHERE 절에서는 현재 근무 중인 직원들만을 대상으로 하기 위해 to_date가 '9999-01-01'인 데이터만 가져옵니다.
+-- 그리고 GROUP BY 구문을 이용하여 직책 별로 평균 연봉을 계산합니다.
+-- HAVING 구문을 이용하여 평균 연봉이 60,000 이상인 직책들만을 대상으로 하고,
+-- ORDER BY 구문을 이용하여 평균 연봉이 높은 직책부터 내림차순으로 정렬합니다.
 
 -- 10. gender가 f 인 employoee의 (from employees) title (from titles)별 employoee 수를 title과 함께 출력해 주세요 
-SELECT t.title, COUNT(*) AS employee_count
+SELECT t.title, COUNT(*) AS employee_count, e.gender
 FROM employees e
 	INNER JOIN titles t
 		ON e.emp_no = t.emp_no
 WHERE e.gender = 'F'
 GROUP BY t.title;
 
+-- employees 테이블과 titles 테이블을 emp_no 컬럼을 기준으로 INNER JOIN하여
+-- 각 직원의 직책 정보와 성별 정보를 가져옵니다.
+-- WHERE 절에서는 성별이 여성인 직원들만을 대상으로 하기 위해 gender가 'F'인 데이터만 가져옵니다.
+-- 그리고 GROUP BY 구문을 이용하여 직책 별로 직원 수를 계산합니다.
+-- 이 때, 성별 정보도 함께 조회하기 위해 gender 컬럼도 GROUP BY 구문에 추가합니다.
+
+-- 11. gender가 f 인 employoee의 (from employees) title (from titles)별 퇴사한 employoee 수를 title과 함께 출력해 주세요 
+SELECT t.title, COUNT(*) AS num_resigned, e.gender
+FROM employees e
+	JOIN titles t
+		ON e.emp_no = t.emp_no
+WHERE e.gender = 'F'
+	AND t.to_date < NOW()
+GROUP BY t.title;
+
+-- employees 테이블과 titles 테이블을 emp_no 컬럼을 기준으로 JOIN하여
+-- 각 직원의 직책 정보와 성별 정보를 가져옵니다. WHERE 절에서는 성별이 여성이며,
+-- 이미 퇴사한 (즉, to_date가 현재 시각보다 이전인) 데이터만 가져옵니다.
+-- 그리고 GROUP BY 구문을 이용하여 직책 별로 퇴사한 여성 직원 수를 계산합니다.
+-- 이 때, 성별 정보도 함께 조회하기 위해 gender 컬럼도 GROUP BY 구문에 추가합니다.
