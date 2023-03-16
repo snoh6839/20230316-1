@@ -39,3 +39,11 @@
 -- SELECT ADDDATE(NOW(), INTERVAL -1 DAY);
 -- SELECT SUBDATE(NOW(), INTERVAL 1 DAY);
 -- SELECT ADDDATE(NOW(), '1:1:1');
+
+-- UPDATE salaries
+-- SET salary = 38735
+-- WHERE emp_no IN (281546, 15830);
+-- 
+-- SELECT RANK() over(ORDER BY salary ASC), emp_no, salary
+-- FROM salaries;
+-- 
