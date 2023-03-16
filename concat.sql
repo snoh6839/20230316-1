@@ -12,3 +12,6 @@
 -- SELECT right ('abcdefg', 3);
 -- 오른쪽부터, 숫자만큼 잘라줌
 
+-- SELECT UPPER('AbCDeF');
+-- SELECT lower('AbCDeF');
+
