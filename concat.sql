@@ -15,3 +15,6 @@
 -- SELECT UPPER('AbCDeF');
 -- SELECT lower('AbCDeF');
 
+-- SELECT LPAD('1',6,'0');
+-- SELECT LPAD('956',6,'0');
+
