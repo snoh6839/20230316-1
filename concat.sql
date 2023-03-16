@@ -17,4 +17,9 @@
 
 -- SELECT LPAD('1',6,'0');
 -- SELECT LPAD('956',6,'0');
+-- SELECT RPAD('956',6,'0');
+
+-- SELECT TRIM('    a   cb    ');
+-- SELECT LTRIM('    a   cb    ');
+-- SELECT RTRIM('    a   cb    ');
 
