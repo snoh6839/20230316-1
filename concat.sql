@@ -6,3 +6,9 @@
 
 -- SELECT FORMAT (123456, 2);
 -- 소수점 자리수 추가해줌
+
+-- SELECT LEFT ('abcdefg', 3);
+-- 왼쪽부터, 숫자만큼 잘라줌
+-- SELECT right ('abcdefg', 3);
+-- 오른쪽부터, 숫자만큼 잘라줌
+
