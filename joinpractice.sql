@@ -4,7 +4,8 @@
 SELECT e.emp_no, concat(e.last_name, ' ' ,e.first_name) AS Full_name, t.title
 FROM employees e
 	INNER JOIN titles t
-		ON e.emp_no = t.emp_no;
+		ON e.emp_no = t.emp_no
+where t.to_date >= NOW();
 
 -- emp_no, CONCAT 함수로 직원의 성(last name)과 이름(first name)을 띄어쓰기로 연결하여
 -- 하나의 문자열로 합쳐주고,
@@ -47,7 +48,15 @@ FROM employees e
 	INNER JOIN dept_emp de
 		ON e.emp_no = de.emp_no
 	INNER JOIN departments d
-		ON de.dept_no = d.dept_no;
+		ON de.dept_no = d.dept_no
+WHERE t.to_date >= NOW()
+ORDER BY e.emp_no;
+		
+-- INNER JOIN을 사용하여
+-- employees 테이블과 dept_emp 테이블은 emp_no를 공통값으로,
+-- dept_emp 테이블과 departments 테이블은 dept_no를 공통값으로 연결해 줬습니다.
+-- 쿼리의 결과는 각 직원의 사번, 성명 (이름과 성), 그리고 해당 직원이 속한 부서명이 출력됩니다.
+-- Full_name이라는 별칭(alias)을 사용하여 first_name과 last_name 열을 합쳐서 출력하였습니다.
 
 -- 5. 현재 salary from salaries 의 상위 10위까지 employee의  last_name, first_name from employees와
 -- 월급을 출력해 주세요.
@@ -137,7 +146,7 @@ FROM employees e
 
 -- 9. 현재 각 title (from titles)별 AVG(salary) from salaries 가 60,000이상인 title의 
 -- title과 AVG(salary) 를 정수로 내림차순 출력해주세요.
-SELECT t.title, FLOOR(AVG(s.salary)) AS avg_salary
+SELECT t.title, CAST(AVG(s.salary) AS INT) AS avg_salary
 FROM titles t
 	INNER JOIN salaries s
 		ON t.emp_no = s.emp_no
