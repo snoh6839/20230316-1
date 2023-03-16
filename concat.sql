@@ -22,4 +22,8 @@
 -- SELECT TRIM('    a   cb    ');
 -- SELECT LTRIM('    a   cb    ');
 -- SELECT RTRIM('    a   cb    ');
+-- SELECT TRIM(LEADING 'abc' FROM 'abcdefabc'); 
+-- SELECT TRIM(TRAILING 'abc' FROM 'abcdefabc');
 
+-- SELECT SUBSTRING('abcdfeg', 2, 4);
+-- SELECT SUBSTRING_INDEX('ab-cda-fe-g', '-', 2);
