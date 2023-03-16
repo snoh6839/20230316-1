@@ -27,3 +27,9 @@
 
 -- SELECT SUBSTRING('abcdfeg', 2, 4);
 -- SELECT SUBSTRING_INDEX('ab-cda-fe-g', '-', 2);
+
+-- CEILING(1.1)
+-- FLOOR(1.9)
+-- ROUND(1.5)
+-- ROUND(1.4)
+-- TRUNCATE(2, 1.11)
