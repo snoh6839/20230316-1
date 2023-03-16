@@ -172,16 +172,70 @@ GROUP BY t.title;
 
 -- 11. gender가 f 인 employoee의 (from employees) title (from titles)별 퇴사한 employoee 수를
 -- title과 함께 출력해 주세요 
-SELECT t.title, COUNT(*) AS num_resigned, e.gender
+SELECT e.emp_no, t.title, e.gender, t.to_date
 FROM employees e
-	JOIN titles t
+	JOIN (
+		SELECT emp_no, title, from_date, to_date
+		FROM titles
+		WHERE to_date < NOW()
+		AND (emp_no, from_date) IN (
+			SELECT emp_no, MAX(from_date)
+			FROM titles
+			GROUP BY emp_no
+		)
+	) t
 		ON e.emp_no = t.emp_no
 WHERE e.gender = 'F'
-	AND t.to_date < NOW()
+GROUP BY e.emp_no, t.title;
+
+-- 일단 여성 사원들 번호, 직급, 퇴사일 출력
+-- emp_no가 겹칠 경우  from date가 가장 큰 것만 선택되게 함
+
+SELECT t.title, COUNT(*) AS num_resigned, e.gender
+FROM employees e
+	JOIN (
+		SELECT emp_no, title, from_date, to_date
+		FROM titles
+		WHERE to_date < NOW()
+		AND (emp_no, from_date) IN (
+			SELECT emp_no, MAX(from_date)
+			FROM titles
+			GROUP BY emp_no
+		)
+	) t
+		ON e.emp_no = t.emp_no
+WHERE e.gender = 'F'
 GROUP BY t.title;
 
--- employees 테이블과 titles 테이블을 emp_no 컬럼을 기준으로 JOIN하여
--- 각 직원의 직책 정보와 성별 정보를 가져옵니다. WHERE 절에서는 성별이 여성이며,
--- 이미 퇴사한 (즉, to_date가 현재 시각보다 이전인) 데이터만 가져옵니다.
--- 그리고 GROUP BY 구문을 이용하여 직책 별로 퇴사한 여성 직원 수를 계산합니다.
--- 이 때, 성별 정보도 함께 조회하기 위해 gender 컬럼도 GROUP BY 구문에 추가합니다.
+-- 사번을 빼고 직책으로 묶어서 카운트 해줌
+
+SELECT e.gender, COUNT(e.gender) AS num_resigned
+FROM employees e
+	JOIN (
+		SELECT emp_no, from_date
+		FROM titles
+		WHERE to_date < NOW()
+			AND (emp_no, from_date) IN (
+				SELECT emp_no, MAX(from_date)
+				FROM titles
+				GROUP BY emp_no
+			)
+	) t
+ON e.emp_no = t.emp_no
+GROUP BY e.gender;
+
+-- SELECT COUNT(*) AS num_resigned
+-- FROM employees e
+-- 	JOIN (
+-- 		SELECT emp_no, from_date
+-- 		FROM titles
+-- 		WHERE to_date < NOW()
+-- 		AND (emp_no, from_date) IN (
+-- 			SELECT emp_no, MAX(from_date)
+-- 			FROM titles
+-- 			GROUP BY emp_no
+-- 		)
+-- 	) t
+-- 		ON e.emp_no = t.emp_no
+-- WHERE e.gender = 'm';
+-- 
