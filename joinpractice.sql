@@ -207,20 +207,33 @@ FROM employees e
 WHERE e.gender = 'F'
 GROUP BY t.title;
 
+
+
 -- 사번을 빼고 직책으로 묶어서 카운트 해줌
+
+-- SELECT e.gender, COUNT(e.gender) AS num_resigned
+-- FROM employees e
+-- 	JOIN (
+-- 		SELECT emp_no, from_date
+-- 		FROM titles
+-- 		WHERE to_date < NOW()
+-- 			AND (emp_no, from_date) IN (
+-- 				SELECT emp_no, MAX(from_date)
+-- 				FROM titles
+-- 				GROUP BY emp_no
+-- 			)
+-- 	) t
+-- ON e.emp_no = t.emp_no
+-- GROUP BY e.gender;
 
 SELECT e.gender, COUNT(e.gender) AS num_resigned
 FROM employees e
 	JOIN (
-		SELECT emp_no, from_date
+		SELECT emp_no
 		FROM titles
-		WHERE to_date < NOW()
-			AND (emp_no, from_date) IN (
-				SELECT emp_no, MAX(from_date)
-				FROM titles
-				GROUP BY emp_no
-			)
-	) t
+		GROUP BY emp_no
+		HAVING MAX(to_date) != DATE('9999-01-01')
+			) t
 ON e.emp_no = t.emp_no
 GROUP BY e.gender;
 
