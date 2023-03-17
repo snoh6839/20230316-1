@@ -49,7 +49,7 @@ FROM employees e
 		ON e.emp_no = de.emp_no
 	INNER JOIN departments d
 		ON de.dept_no = d.dept_no
-WHERE t.to_date >= NOW()
+WHERE de.to_date >= NOW()
 ORDER BY e.emp_no;
 		
 -- INNER JOIN을 사용하여
